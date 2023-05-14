@@ -72,23 +72,25 @@ class App{
     loadCamera(){
 	    const loader = new GLTFLoader().setPath(this.assetsPath);
         const dracoLoader = new DRACOLoader();
-        dracoLoader.setDecoderPath( '../../libs/three/js/draco/' );
+        dracoLoader.setDecoderPath( '../../libs/three125/draco/' );
         loader.setDRACOLoader( dracoLoader );
 		const self = this;
 		
         // Load a GLTF resource
 		loader.load(
 			// resource URL
-			`steampunk_camera.glb`,
+			`office-chair.glb`,
 			// called when the resource is loaded
 			function ( gltf ) {
 				self.model = gltf.scene;
                 self.model.position.set( 0, 0, -1 );
 				self.scene.add( self.model );
 				
-                //Step 1 - create a mixer and an action
+                self.lense = self.model.getObjectByName( "LenseMag" );
+                self.lense.userData.startQuat = self.lense.quaternion.clone();
+                
                 const mixer = new THREE.AnimationMixer( self.model );
-                const action = new mixer.clipAction( gltf.animations[0] );
+                const action = mixer.clipAction( gltf.animations[0] );
                 action.loop = THREE.LoopOnce;
                 self.action = action;
                 
@@ -126,8 +128,7 @@ class App{
         const self = this;
         
         function onSelect() {
-            //Step 3 - Trigger the action
-            if (!self.action.isRunning()){
+            if ( !self.action.isRunning() ){
                 self.action.time = 0;
                 self.action.enabled = true;
                 self.action.play();
@@ -147,7 +148,6 @@ class App{
         const self = this;
         if ( !this.renderer.xr.isPresenting) this.model.rotateY( 0.01 );
         
-        //Step 2 - update all the mixers
         this.mixers.forEach( mixer => mixer.update(dt) );
         
         this.renderer.render( this.scene, this.camera );
