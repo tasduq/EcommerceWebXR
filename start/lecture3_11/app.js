@@ -74,7 +74,7 @@ class App {
     // Load a GLTF resource
     loader.load(
       // resource URL
-      `bed_01.glb`,
+      `scene.glb`,
       // called when the resource is loaded
       function (gltf) {
         console.log(gltf);
