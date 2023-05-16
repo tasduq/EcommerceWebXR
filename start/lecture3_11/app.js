@@ -74,7 +74,7 @@ class App {
     // Load a GLTF resource
     loader.load(
       // resource URL
-      `burgercomp.glb`,
+      `sofa_chair.glb`,
       // called when the resource is loaded
       function (gltf) {
         console.log(gltf);
